@@ -10,7 +10,7 @@
     {
       "name": "planship",
       "description": "Plan (adaptive-plan-mode), ship (ship-pr), and test (user-tester) skills for Claude Code.",
-      "source": "./plugins/planship",
+      "source": "./",
       "category": "productivity"
     }
   ]

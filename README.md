@@ -26,19 +26,23 @@ Three Claude Code skills that cover the full loop of a coding task: **plan** it,
 
 ## Structure
 
+Layout follows [obra/superpowers](https://github.com/obra/superpowers): skills and agents live at repo root, harness-agnostic; each harness gets its own thin plugin-config folder pointing at the same root content. Currently only `.claude-plugin/` is wired up — folders for other harnesses (Codex, opencode, agy) can be added later without touching `skills/` or `agents/`.
+
 ```
-.claude-plugin/marketplace.json      # marketplace manifest
-plugins/planship/
-  .claude-plugin/plugin.json         # plugin manifest + hooks
-  hooks/adaptive-plan-mode-reminder.ps1
-  agents/
-    oryna.md
-  skills/
-    adaptive-plan-mode/
-    ship-pr/
-    user-tester/
-    grilling/
-    self-improve-after-running.md    # shared by adaptive-plan-mode and ship-pr
+.claude-plugin/
+  marketplace.json                   # Claude Code marketplace manifest
+  plugin.json                        # Claude Code plugin manifest + hooks
+hooks/                                # Claude-Code-specific (PreToolUse/UserPromptSubmit hooks)
+  adaptive-plan-mode-reminder.ps1
+  advisor-trigger.ps1
+agents/
+  oryna.md
+skills/
+  adaptive-plan-mode/
+  ship-pr/
+  user-tester/
+  grilling/
+  self-improve-after-running.md      # shared by adaptive-plan-mode and ship-pr
 ```
 
 ## License
