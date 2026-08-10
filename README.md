@@ -1,17 +1,30 @@
 # planship
 
-Three Claude Code skills that cover the full loop of a coding task: **plan** it, **ship** it, **test** it.
+A small, opinionated methodology for shipping code with an AI coding agent: **plan it, ship it, test it** — in that order, every time.
+
+Most skill collections are a grab-bag you invoke ad hoc. planship is a loop: don't write code until the plan is right-sized to the risk; don't call a change done until an independent pass has reviewed the diff; don't ship a feature without a demanding user actually clicking through it first. Each stage hands off evidence to the next — a plan the review checks against, a diff the tests verify, a working build the user-tester interrogates. Skip a stage and the next one has nothing to check against.
+
+## The loop
+
+1. **Plan** — `adaptive-plan-mode` scales planning depth to what's actually at stake. A typo fix skips ceremony; an irreversible schema change gets investigated, grilled for open decisions, and reviewed before a line of code is written.
+2. **Ship** — `ship-pr` takes the implemented change through self-review, PR creation, and merge-and-sync — the full PR/MR life cycle on GitHub or GitLab, not just "open a PR and walk away."
+3. **Test** — `user-tester` drives the shipped feature in a real browser like a demanding, skeptical user would, before anyone else finds the bug.
+
+Two supporting pieces feed the loop when it hits a decision it can't resolve alone:
+
+- **grilling** — interviews you one question at a time until an open decision has a shared answer, instead of guessing.
+- **oryna** (agent) — for the rare fork that's expensive to reverse and codebase evidence alone can't settle: researches how major OSS projects and production post-mortems handled the same call, then delivers a committed verdict.
 
 ## Skills
 
-- **adaptive-plan-mode** — Plan before implementing. Scales planning depth to task risk; skips ceremony for typo fixes and one-liners, forces a real plan before anything non-trivial.
-- **ship-pr** — Ships the current branch through its full PR/MR life cycle on GitHub or GitLab: pre-PR review, PR creation, tracking, and merge-and-sync.
+- **adaptive-plan-mode** — Plan before implementing. Skips ceremony for typo fixes and one-liners, forces a real plan before anything non-trivial.
+- **ship-pr** — Ships the current branch through its full PR/MR life cycle: pre-PR review, PR creation, tracking, and merge-and-sync.
 - **user-tester** — Tests a web project end-to-end by simulating a demanding real user (a "mystery shopper") in a browser before release.
-- **grilling** — Interviews you relentlessly about a plan's open decisions, one question at a time, until there's a shared understanding. Used by adaptive-plan-mode and user-tester to settle judgment calls instead of guessing. Vendored from [mattpocock/skills](https://github.com/mattpocock/skills) (`skills/productivity/grill-me`), © Matt Pocock.
+- **grilling** — Interviews you relentlessly about a plan's open decisions, one question at a time. Vendored from [mattpocock/skills](https://github.com/mattpocock/skills) (`skills/productivity/grill-me`), © Matt Pocock.
 
 ## Agents
 
-- **oryna** — Grizzled senior advisor for decisions you're unsure about (architecture, tech selection, build-vs-buy, migrations). Researches how major OSS projects and forums settled the same question, then delivers an independent, evidence-backed verdict. adaptive-plan-mode spawns it for hard-to-reverse forks that codebase evidence alone can't settle. Runs on `opus`.
+- **oryna** — Grizzled senior advisor for decisions you're unsure about (architecture, tech selection, build-vs-buy, migrations). Researches how major OSS projects and forums settled the same question, then delivers an independent, evidence-backed verdict. Runs on `opus`.
 
 ## External dependency
 
