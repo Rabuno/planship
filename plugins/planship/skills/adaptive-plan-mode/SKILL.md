@@ -146,7 +146,7 @@ Done when: the change matches the plan and is verified working (tests pass, or d
 
 # Phase 8 — Independent Review
 
-Spawn a review agent on model `opus`, `agentType: feature-dev:code-reviewer` — fresh eyes, no stake in the plan or the code just written — before reporting done. Give it the Phase 5 plan and the actual diff; ask it to check on two axes — Spec (does the diff match the plan) and Standards (does it match this codebase's existing conventions) — and flag what the implementing pass missed on either. This agent type has no shell — it reads, it doesn't re-run tests. It's not the quality gate; Phase 7's own test/build run is. Don't ask it to verify what it can't execute.
+Invoke the `code-review` skill — fresh eyes, no stake in the plan or the code just written — before reporting done. Point it at the merge-base for the branch; it checks the diff on two axes — Spec (does the diff match the Phase 5 plan) and Standards (does it match this codebase's existing conventions) — and flags what the implementing pass missed on either. It's not the quality gate; Phase 7's own test/build run is. Don't ask it to verify what it can't execute.
 
 Skip this review only when BOTH hold: (1) the diff passes every line of the Trivial Gate, and (2) an automated check that exercises the changed lines passed in Phase 7 — an existing test, or a small runnable check that fails on the pre-change code for a behavior change. A check that would've passed either way proves nothing; re-reading your own diff counts as neither.
 

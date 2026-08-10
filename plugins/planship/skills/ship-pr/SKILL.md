@@ -31,7 +31,7 @@ Done when: Boss confirmed a single PR, or every group sits on its own branch and
 
 Skip this step entirely when `adaptive-plan-mode` already ran its Phase 8 review and Phase 9 verify on this exact diff, with no commits since — say so and move to step 4.
 
-Run the `feature-dev:code-reviewer` agent on `git diff <base>...HEAD` (base = the branch the PR will target). Fix every finding, or list the ones being waived and get Boss's explicit waive. This runs every time, even with reviewers and CI downstream: on a solo repo it is the only review the code will ever get, and on a team repo it saves the reviewer a round on an unpolished diff.
+Invoke the `code-review` skill against `<base>` (base = the branch the PR will target). Fix every finding, or list the ones being waived and get Boss's explicit waive. This runs every time, even with reviewers and CI downstream: on a solo repo it is the only review the code will ever get, and on a team repo it saves the reviewer a round on an unpolished diff.
 
 Then, if the diff touches runtime surface (product source — anything beyond docs/tests), run the `verify` skill on the final state of the branch. Verify comes after review on purpose: review findings produce fixes, and the fixes are part of what gets verified.
 
