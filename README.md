@@ -26,6 +26,18 @@ Two supporting pieces feed the loop when it hits a decision it can't resolve alo
 
 - **oryna** — Grizzled senior advisor for decisions you're unsure about (architecture, tech selection, build-vs-buy, migrations). Researches how major OSS projects and forums settled the same question, then delivers an independent, evidence-backed verdict. Runs on `opus`.
 
+## Modes
+
+`/planship-mode [economy|normal|premium]` switches which model the two model-selectable spots in planship use — adaptive-plan-mode's Phase 6 plan-review agent, and the `oryna` agent. Nothing else changes; `ship-pr`, `user-tester`, and `grilling` don't spawn a model-selectable agent.
+
+| Mode | Review agent | oryna |
+|---|---|---|
+| `economy` | `sonnet` | `sonnet` |
+| `normal` (default) | `opus` | `opus` |
+| `premium` | `opus`, effort/thinking max | `opus`, effort/thinking max |
+
+State lives in `~/.claude/planship/mode.txt`; a `UserPromptSubmit` hook re-injects the current mode each turn (skill/agent instructions are static text and can't read state on their own). No file, or `normal`, means no reminder — planship's baseline behavior.
+
 ## External dependency
 
 - **code-review** — adaptive-plan-mode (Phase 8) and ship-pr (step 3) call the `code-review` skill for Spec/Standards review of the diff. Not bundled here; install it separately if you don't already have it.
@@ -45,9 +57,12 @@ Layout follows [obra/superpowers](https://github.com/obra/superpowers): skills a
 .claude-plugin/
   marketplace.json                   # Claude Code marketplace manifest
   plugin.json                        # Claude Code plugin manifest + hooks
+commands/
+  planship-mode.md                   # /planship-mode slash command
 hooks/                                # Claude-Code-specific (PreToolUse/UserPromptSubmit hooks)
   adaptive-plan-mode-reminder.ps1
   advisor-trigger.ps1
+  planship-mode-reminder.ps1
 agents/
   oryna.md
 skills/
