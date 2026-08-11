@@ -126,7 +126,7 @@ Any line uncertain to call — treat it as failed.
 
 # Phase 6 — Get Approval
 
-Once the plan (Phase 5) is ready: spawn a review agent on model `opus`, `agentType: Plan` — fresh eyes on the plan, catching gaps before the human reads it — and fold its findings in. Exception: if the plan passes every line of the Trivial Gate, you may re-read it yourself instead — the human approval gate immediately below backstops this case. Done when: the plan reflects the review's findings (or your own re-read), fixed or explicitly rejected.
+Once the plan (Phase 5) is ready: spawn a review agent on model `opus`, `agentType: Plan` — fresh eyes on the plan, catching gaps before the human reads it — and fold its findings in. If a `planship-mode` reminder for a mode other than `normal` is in context, use the model it specifies instead of `opus`. Exception: if the plan passes every line of the Trivial Gate, you may re-read it yourself instead — the human approval gate immediately below backstops this case. Done when: the plan reflects the review's findings (or your own re-read), fixed or explicitly rejected.
 
 Then call `ExitPlanMode` with the plan and wait for approval — this is the boundary where a Plan/Execute split switches to the execution model. Start implementing only after that call returns approved.
 
