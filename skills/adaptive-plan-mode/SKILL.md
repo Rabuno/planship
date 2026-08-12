@@ -136,7 +136,7 @@ If the plan changes before or at that gate — human feedback, a revision reques
 
 # Phase 7 — Execute
 
-Before touching files, create a new git branch off the current one — never implement on the branch the plan was approved on. Branch count scales with the plan: one branch for the whole plan when it's a single unit of work; one per independently mergeable/revertable step when the Implementation Plan has parts that stand on their own.
+Before touching files, ask the user whether to implement on the current branch or create a new one — don't default to a new branch. If new: branch count scales with the plan — one branch for the whole plan when it's a single unit of work; one per independently mergeable/revertable step when the Implementation Plan has parts that stand on their own.
 
 Follow the approved plan: invoke the Execution Skills it names as each applies, keep changes small and reviewable, avoid speculative abstractions, verify assumptions continuously, update the plan if reality changes materially.
 
