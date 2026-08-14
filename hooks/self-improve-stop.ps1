@@ -11,7 +11,7 @@ try {
 
     if ($payload.stop_hook_active -eq $true) { exit 0 }
 
-    $reason = "Truoc khi dung: xet phien vua roi co friction nao khong -- Boss sua/chinh 1 hanh dong hay quyet dinh, mot buoc skill khong khop thuc te, mot mo ho bi tu quyet thay vi hoi -- CHI voi cac skill/agent thuoc plugin planship (adaptive-plan-mode, ship-pr, user-tester, grilling, oryna) da chay trong phien. Bo qua moi skill khac khong thuoc plugin planship, du co friction gi voi no. Khong co friction that voi planship -> im lang, ket thuc binh thuong, khong can bao cao gi. Co -> doc skills/self-improve-after-running.md, de xuat diff cu the cho skill planship lien quan, cho Boss xem, chi ap dung khi Boss duyet."
+    $reason = "Self-check (silent): any friction with planship skills/agents run this session (adaptive-plan-mode, ship-pr, user-tester, grilling, oryna)? No -> stay silent, no report. Yes -> read skills/self-improve-after-running.md, propose a diff, wait for approval."
 
     $out = [PSCustomObject]@{
         decision = "block"
