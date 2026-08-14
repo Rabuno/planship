@@ -34,7 +34,7 @@ Done when: problem, goal, scope, and constraints are stated in your own words. I
 
 Investigate before proposing implementation: code ownership and structure, callers/consumers, data model and migrations, concurrency, existing conventions, error handling, performance-sensitive paths, tests and fixtures, feature flags, rollout patterns, operational history, third-party constraints.
 
-Parallelize across sub-agents when the task is large enough that context separation improves reasoning, or independent questions can be explored simultaneously — proportional to complexity, not agent explosion. Default `agentType: caveman:cavecrew-investigator` for a targeted lookup (read-only, output pre-compressed — keeps the main thread's context cheap). Reach for `agentType: feature-dev:code-explorer` instead when the task needs a full architecture/dependency map before an approach can be chosen.
+Before spawning anything, break the investigation into its independent sub-questions (ownership, callers, data model, tests, …) — one broad agent sent to "explore everything" is no different from doing it yourself, so never issue one. Spawn one targeted agent per sub-question, all in a single message so they run concurrently; a task with only one real sub-question earns only one agent. Default `agentType: caveman:cavecrew-investigator` per targeted lookup (read-only, output pre-compressed — keeps the main thread's context cheap). Reach for `agentType: feature-dev:code-explorer` instead when a sub-question needs a full architecture/dependency map before an approach can be chosen.
 
 For a hard bug with several plausible root causes and no way to rule one out from code alone, propose an [agent team](https://code.claude.com/docs/en/agent-teams) to the user instead — teammates test competing hypotheses in parallel and challenge each other's findings, which no sub-agent (report-back-only) can do. Ask before spawning: experimental, needs `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1`, and costs meaningfully more tokens than sub-agents.
 
@@ -136,7 +136,7 @@ If the plan changes before or at that gate — human feedback, a revision reques
 
 # Phase 7 — Execute
 
-Before touching files, ask the user whether to implement on the current branch or create a new one — don't default to a new branch. If new: branch count scales with the plan — one branch for the whole plan when it's a single unit of work; one per independently mergeable/revertable step when the Implementation Plan has parts that stand on their own.
+Before touching files, call `AskUserQuestion` with the current branch name as one option and "new branch" as the other — a blocking gate, not a rhetorical aside. Never create a branch until that call returns an answer. If new: branch count scales with the plan — one branch for the whole plan when it's a single unit of work; one per independently mergeable/revertable step when the Implementation Plan has parts that stand on their own.
 
 Follow the approved plan: invoke the Execution Skills it names as each applies, keep changes small and reviewable, avoid speculative abstractions, verify assumptions continuously, update the plan if reality changes materially.
 
