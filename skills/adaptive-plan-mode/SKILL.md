@@ -128,6 +128,8 @@ Any line uncertain to call — treat it as failed.
 
 Once the plan (Phase 5) is ready: spawn a review agent on model `opus`, `agentType: Plan` — fresh eyes on the plan, catching gaps before the human reads it — and fold its findings in. If a `planship-mode` reminder for a mode other than `normal` is in context, use the model and effort it specifies instead of `opus` at default effort. Exception: if the plan passes every line of the Trivial Gate, you may re-read it yourself instead — the human approval gate immediately below backstops this case. Done when: the plan reflects the review's findings (or your own re-read), fixed or explicitly rejected.
 
+Log the outcome: create `~/.claude/planship/` if needed, then append one UTF-8 line (`Add-Content -Encoding utf8` on Windows) to `~/.claude/planship/log.jsonl` — `{"ts":"<ISO-8601 UTC>","event":"plan","trivial":true}` if the Trivial Gate passed, `{"ts":"<ISO-8601 UTC>","event":"plan","trivial":false}` otherwise. Append-only, one line per plan, never rewrite or rotate the file.
+
 Then call `ExitPlanMode` with the plan and wait for approval — this is the boundary where a Plan/Execute split switches to the execution model. Start implementing only after that call returns approved.
 
 If the plan changes before or at that gate — human feedback, a revision request — revise it, then run the review again only when the change is material: a different approach, scope, or risk profile. Trivial edits (wording, a renamed variable, a dropped open question) skip the extra pass.
@@ -138,7 +140,7 @@ If the plan changes before or at that gate — human feedback, a revision reques
 
 Before touching files, call `AskUserQuestion` with the current branch name as one option and "new branch" as the other — a blocking gate, not a rhetorical aside. Never create a branch until that call returns an answer. If new: branch count scales with the plan — one branch for the whole plan when it's a single unit of work; one per independently mergeable/revertable step when the Implementation Plan has parts that stand on their own.
 
-Follow the approved plan: invoke the Execution Skills it names as each applies, keep changes small and reviewable, avoid speculative abstractions, verify assumptions continuously, update the plan if reality changes materially.
+Follow the approved plan: invoke the Execution Skills it names as each applies, keep changes small and reviewable, match existing abstractions instead of introducing new ones, verify assumptions continuously, update the plan if reality changes materially.
 
 Done when: the change matches the plan and is verified working (tests pass, or drive the flow per the `verify` skill) — then move to Phase 8.
 
@@ -151,6 +153,8 @@ Invoke the `code-review` skill — fresh eyes, no stake in the plan or the code 
 Skip this review only when BOTH hold: (1) the diff passes every line of the Trivial Gate, and (2) an automated check that exercises the changed lines passed in Phase 7 — an existing test, or a small runnable check that fails on the pre-change code for a behavior change. A check that would've passed either way proves nothing; re-reading your own diff counts as neither.
 
 Done when: the review agent has returned and each finding is either fixed or named to the user as an accepted risk.
+
+Log the outcome: append one UTF-8 line to `~/.claude/planship/log.jsonl` — `{"ts":"<ISO-8601 UTC>","event":"review","findings":<N>}`, N = number of findings the review returned (0 if none). This step ran → always log it, regardless of N.
 
 ---
 

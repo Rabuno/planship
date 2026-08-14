@@ -2,6 +2,10 @@
 
 A small, opinionated methodology for shipping code with an AI coding agent: **plan it, ship it, test it** — in that order, every time.
 
+**Without planship:** "add retries to the payment call" turns into a 40-line change straight to `main` — no plan, no review, no one clicking through the flow before it ships. The bug (retry on a non-idempotent charge) surfaces in production.
+
+**With planship:** `adaptive-plan-mode` investigates the call site first, flags the idempotency risk in the plan, gets it reviewed before a line is written; `ship-pr` runs an independent Standards/Spec review on the diff before opening the PR; `user-tester` clicks through the retry path in a real browser before anyone else does. Same request, same agent — the loop is what catches it.
+
 Most skill collections are a grab-bag you invoke ad hoc. planship is a loop: don't write code until the plan is right-sized to the risk; don't call a change done until an independent pass has reviewed the diff; don't ship a feature without a demanding user actually clicking through it first. Each stage hands off evidence to the next — a plan the review checks against, a diff the tests verify, a working build the user-tester interrogates. Skip a stage and the next one has nothing to check against.
 
 ## The loop
@@ -38,6 +42,10 @@ Two supporting pieces feed the loop when it hits a decision it can't resolve alo
 
 State lives in `~/.claude/planship/mode.txt`; a `UserPromptSubmit` hook re-injects the current mode each turn (skill/agent instructions are static text and can't read state on their own). No file, or `normal`, means no reminder — planship's baseline behavior.
 
+## Stats
+
+`/planship-stats` prints a scoreboard from `~/.claude/planship/log.jsonl`: how many plans correctly skipped ceremony via the Trivial Gate, how many independent reviews caught findings before ship. Lines are written by the agent executing the skill — an interrupted or non-planship run logs nothing, so the numbers undercount, never overcount.
+
 ## External dependency
 
 - **code-review** — adaptive-plan-mode (Phase 8) and ship-pr (step 3) call the `code-review` skill for Spec/Standards review of the diff. Not bundled here; install it separately if you don't already have it.
@@ -59,6 +67,7 @@ Layout follows [obra/superpowers](https://github.com/obra/superpowers): skills a
   plugin.json                        # Claude Code plugin manifest + hooks
 commands/
   planship-mode.md                   # /planship-mode slash command
+  planship-stats.md                  # /planship-stats slash command
 hooks/                                # Claude-Code-specific (PreToolUse/UserPromptSubmit hooks)
   adaptive-plan-mode-reminder.ps1
   advisor-trigger.ps1

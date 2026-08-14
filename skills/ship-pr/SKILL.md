@@ -31,15 +31,17 @@ Done when: Boss confirmed a single PR, or every group sits on its own branch and
 
 Skip this step entirely when `adaptive-plan-mode` already ran its Phase 8 review and Phase 9 verify on this exact diff, with no commits since — say so and move to step 4.
 
-Invoke the `code-review` skill against `<base>` (base = the branch the PR will target). Fix every finding, or list the ones being waived and get Boss's explicit waive. This runs every time, even with reviewers and CI downstream: on a solo repo it is the only review the code will ever get, and on a team repo it saves the reviewer a round on an unpolished diff.
+Invoke the `code-review` skill against `<base>` (base = the branch the PR will target). Fix every finding, or list the ones being waived and get Boss's explicit waive. This runs every time, even with reviewers and CI downstream.
 
 Then, if the diff touches runtime surface (product source — anything beyond docs/tests), run the `verify` skill on the final state of the branch. Verify comes after review on purpose: review findings produce fixes, and the fixes are part of what gets verified.
 
 Done when: every review finding is fixed or Boss-waived, and `verify` passed on the final code (or the diff had no runtime surface, or the step was skipped per above).
 
+If `code-review` ran above (not skipped): log it. Create `~/.claude/planship/` if needed, then append one UTF-8 line (`Add-Content -Encoding utf8` on Windows) to `~/.claude/planship/log.jsonl` — `{"ts":"<ISO-8601 UTC>","event":"review","findings":<N>}`, N = number of findings returned (0 if none). Append-only, one line per run, never rewrite or rotate the file.
+
 ## 4. Open the PR
 
-Check for existing PR on branch before creating one — don't assume none: `gh pr list --head <branch> --state all --json number,state,url`.
+Check for existing PR on branch before creating one — verify none exists first: `gh pr list --head <branch> --state all --json number,state,url`.
 
 - Nothing found → create one (`gh pr create`).
 - Found, state OPEN → branch already shipped once, picked up more commits since; push them (`git push`), then skip straight to it with `gh pr view <num>`.
@@ -87,9 +89,7 @@ gh pr view <num> --json mergeable,mergeStateStatus
 
 `mergeable` computed async — right after checks finish it can read `UNKNOWN`; wait few seconds, re-query rather than treating that as blocked.
 
-- `mergeable: CONFLICTING` or `mergeStateStatus: DIRTY` → real content conflict. Tell Boss, ask: resolve it yourself, or Boss rebases manually. If Boss wants it resolved: `git fetch`, confirm it's genuine with `git merge-tree $(git merge-base origin/<base> <branch>) origin/<base> <branch>` (no `<<<<<<<` markers → clean auto-merge, merge and push), then `git merge origin/<base>` and hand-resolve any real markers. Rebuild/retest, then loop back to step 3 before pushing — hand-resolved conflict is unreviewed code same as any other diff.
-- `mergeStateStatus: BEHIND` → branch out of date with base, no conflict. Run `gh pr update-branch <num>`, then go back to step 5.
-- `mergeStateStatus: BLOCKED` → checks and content fine; branch protection rule isn't satisfied — almost always missing required approval (GitHub won't count your own approval on your own PR). Confirm with `gh api repos/{owner}/{repo}/branches/<base>/protection` (`required_pull_request_reviews.required_approving_review_count`); 404 "Branch not protected" there does NOT mean no rules — repo may use rulesets instead, check `gh api repos/{owner}/{repo}/rules/branches/<base>` (look for `pull_request` rule's `required_approving_review_count`). If repo has other collaborators, request one: `gh pr edit <num> --add-reviewer <user>`, then stop — wait for review rather than pushing further. If solo-maintainer repo and Boss is repo admin, `enforce_admins: false` means requirement can be bypassed with `--admin` on merge command below — surface this explicitly as part of merge confirmation, don't apply it silently.
+Non-clean `mergeable`/`mergeStateStatus` → see [merge-edge-cases.md](merge-edge-cases.md) for the CONFLICTING/DIRTY, BEHIND, and BLOCKED branches.
 
 Pick merge method: `gh repo view --json squashMergeAllowed,mergeCommitAllowed,rebaseMergeAllowed`. One method enabled → use it. Several enabled → ask Boss which, unless project's CLAUDE.md already states convention.
 
@@ -103,7 +103,7 @@ gh pr merge <num> --<method> --delete-branch
 
 Add `--admin` only for BLOCKED-bypass case above, and only after Boss confirmed it specifically.
 
-`--delete-branch` deletes branch both locally and on remote, switches local checkout to base branch as part of that — no separate branch cleanup needed.
+`--delete-branch` deletes branch both locally and on remote, switches local checkout to base branch as part of that.
 
 Done when: Boss explicitly said to proceed, and the merge command exits 0.
 
