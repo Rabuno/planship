@@ -10,4 +10,5 @@ Set planship's model mode to `$ARGUMENTS` (default `normal` if empty; must be on
    - `economy` — adaptive-plan-mode's Phase 6 plan-review agent and `oryna` both run on `sonnet`.
    - `normal` (default) — review agent and `oryna` both run on `opus`. Unchanged from planship's baseline behavior.
    - `premium` — review agent and `oryna` run on `opus` with effort/thinking pushed to max.
-3. Nothing else in planship changes — `ship-pr`, `user-tester`, and `grilling` don't spawn a model-selectable agent, so this mode has no effect on them.
+
+Note: `ship-pr`, `user-tester`, and `grilling` don't spawn a model-selectable agent, so this mode has no effect on them.

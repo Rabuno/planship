@@ -10,8 +10,7 @@ Disclosed reference for [`adaptive-plan-mode`](SKILL.md) Phase 2. Open when dele
 > 3. Unknowns or risks
 >
 > Constraints:
-> - do not modify files
+> - read-only: report findings, don't touch files
 > - stay concise
-> - avoid speculation
 
 Sub-agent output is evidence, not truth — cross-check critical conclusions.

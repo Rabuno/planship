@@ -1,6 +1,6 @@
 # Evaluation Dimensions
 
-Disclosed reference for [`adaptive-plan-mode`](SKILL.md) Phase 3. Pick the dimensions relevant to the task — most tasks touch two or three, not all seven.
+Disclosed reference for [`adaptive-plan-mode`](SKILL.md) Phase 3. Mark each of the seven dimensions relevant or not — most tasks end up with two or three marked relevant, but all seven get a line.
 
 ## Correctness
 Check: invalid input, empty states, malformed data, duplicate operations, ordering issues, stale state, race conditions, partial updates.

@@ -3,6 +3,7 @@
 # text and can't read state on their own. Silent when mode is "normal"
 # (planship's baseline behavior, nothing to override) or the state file is
 # missing. Silent-fails on any error; never blocks the prompt.
+# mode→model/effort mapping mirrors commands/planship-mode.md — keep both in sync.
 
 try {
     $modeFile = "$HOME\.claude\planship\mode.txt"
