@@ -1,7 +1,7 @@
 {
   "name": "planship",
   "description": "Plan (adaptive-plan-mode), ship (ship-pr), and test (user-tester) skills for Claude Code.",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "author": {
     "name": "Rabuno",
     "url": "https://github.com/Rabuno"
