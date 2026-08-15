@@ -1,7 +1,7 @@
 {
   "name": "planship",
   "description": "Plan (adaptive-plan-mode), ship (ship-pr), and test (user-tester) skills for Claude Code.",
-  "version": "1.4.1",
+  "version": "1.5.0",
   "author": {
     "name": "Rabuno",
     "url": "https://github.com/Rabuno"
@@ -12,18 +12,15 @@
         "hooks": [
           {
             "type": "command",
-            "command": "powershell -File \"${CLAUDE_PLUGIN_ROOT}/hooks/adaptive-plan-mode-reminder.ps1\"",
-            "shell": "powershell"
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/adaptive-plan-mode-reminder.js\""
           },
           {
             "type": "command",
-            "command": "powershell -File \"${CLAUDE_PLUGIN_ROOT}/hooks/advisor-trigger.ps1\"",
-            "shell": "powershell"
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/advisor-trigger.js\""
           },
           {
             "type": "command",
-            "command": "powershell -File \"${CLAUDE_PLUGIN_ROOT}/hooks/planship-mode-reminder.ps1\"",
-            "shell": "powershell"
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/planship-mode-reminder.js\""
           }
         ]
       }
@@ -33,8 +30,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "powershell -File \"${CLAUDE_PLUGIN_ROOT}/hooks/self-improve-stop.ps1\"",
-            "shell": "powershell"
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/self-improve-stop.js\""
           }
         ]
       }

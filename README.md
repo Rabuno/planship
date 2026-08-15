@@ -52,16 +52,33 @@ State lives in `~/.claude/planship/mode.txt`; a `UserPromptSubmit` hook re-injec
 
 ## Install
 
+### Claude Code
+
 ```
 /plugin marketplace add Rabuno/planship
 /plugin install planship@planship
 ```
 
-## Structure
+### Codex
 
-Layout follows [obra/superpowers](https://github.com/obra/superpowers): skills and agents live at repo root, harness-agnostic; each harness gets its own thin plugin-config folder pointing at the same root content. Currently only `.claude-plugin/` is wired up — folders for other harnesses (Codex, opencode, agy) can be added later without touching `skills/` or `agents/`.
+Codex loads the shared skills through `.codex-plugin/plugin.json`:
 
 ```
+codex plugin marketplace add C:\path\to\planship
+codex plugin add planship@planship
+```
+
+Start a new Codex thread after installation so it loads the plugin. Claude-specific hooks, slash
+commands, and agent configuration remain under `.claude-plugin/`; Codex uses the shared `skills/`
+directory.
+
+## Structure
+
+Layout follows [obra/superpowers](https://github.com/obra/superpowers): skills and agents live at repo root, harness-agnostic; each harness gets its own thin plugin-config folder pointing at the same root content. Claude Code and Codex are wired up without duplicating the shared skills.
+
+```
+.codex-plugin/
+  plugin.json                        # Codex plugin manifest
 .claude-plugin/
   marketplace.json                   # Claude Code marketplace manifest
   plugin.json                        # Claude Code plugin manifest + hooks
