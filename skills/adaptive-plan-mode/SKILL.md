@@ -58,7 +58,16 @@ Generate every approach that's a real fork in the road, investigated, never fake
 
 Done when: one approach is chosen and every losing alternative has a one-line reason.
 
-If the chosen approach still rests on unconfirmed assumptions — scope, priorities, risk tolerance, a tradeoff between alternatives — invoke the `grilling` skill to grill the user before drafting the plan. Runs on investigated evidence instead of guesses now; cheaper to settle here than discard a written plan built on a wrong premise.
+### Decision gate: hand user-owned decisions to `grilling`
+
+Before drafting the plan, audit every decision that affects scope, user-visible behavior, compatibility, rollout, risk tolerance, or a tradeoff between alternatives. Mark each one as either:
+
+- **evidence-settled** — the codebase, tests, docs, or the user's request determines the answer; or
+- **user-owned** — more than one reasonable answer remains and the choice depends on the user's priorities, policy, or risk tolerance.
+
+If any decision is **user-owned**, invoke the `grilling` skill now. Pass it the investigated findings and the recommended answer for the first open decision. `grilling` must ask one question at a time and wait for the user's answer; do not draft the plan, call the plan reviewer, or edit files while that interview is pending. Continue the interview until all user-owned decisions have an explicit answer and grilling confirms shared understanding. Record those answers under `Constraints & Assumptions` and `Key Findings` in Phase 5.
+
+If no user-owned decision remains, record `No grilling required: all decisions are evidence-settled` in the plan's `Open Questions` section. Never skip this audit silently and never resolve a user-owned decision by guessing.
 
 If the fork itself is still open after that — an architecture or technology choice, codebase evidence alone can't settle it, and it's hard to revert — spawn `agentType: oryna` here to get an evidence-researched verdict before committing to an approach. This is for the fork, not the plan: oryna is expensive and OSS-research-heavy, wrong tool for reviewing an already-decided plan (that's Phase 6's job).
 
